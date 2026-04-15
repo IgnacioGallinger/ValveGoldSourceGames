@@ -1,7 +1,7 @@
 # ValveGoldSourceGames
 This pack includes all 10 games distributed and developed by Valve using the GoldSource Engine, plus some additional games with extra features...
 
-###(Spanish)
+### (Spanish)
 Instalador de ValveGoldSrcGames v1.0.0
 
 ---
@@ -51,7 +51,7 @@ Las modificaciones originales y la estructura de compilación de este proyecto e
 Puedes compartir y adaptar este material siempre que des crédito y no lo uses con fines comerciales.
 Para más información lea el archivo "LICENSE" que se encuentra en esta carpeta
 
-###(English)
+### (English)
 ValveGoldSrcGames Installer v1.0.0
 
 ---
