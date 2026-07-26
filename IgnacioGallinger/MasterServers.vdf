@@ -1,0 +1,15 @@
+"MasterServers"
+{
+	"hl1"
+	{
+		"0"
+		{
+			"addr"		"ms.gametracker.com:27010"
+		}
+		"1"
+		{
+			"addr"		"ms.gs4u.net:27010"
+		}
+	}
+}
+
