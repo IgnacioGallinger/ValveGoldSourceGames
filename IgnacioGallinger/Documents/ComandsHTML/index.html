@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comandos en los juegos de GoldSrc</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Fondo repetido */
+            background-image: url('background.png');
+            background-repeat: repeat;
+            background-attachment: fixed;
+            background-color: #2b2626; /* Color de respaldo */
+            margin: 20px;
+            color: #e0e0e0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff9d3f; /* Naranja inspirado en Lambda */
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* Contenedor de Controles */
+        .controls-container {
+            background-color: rgba(45, 45, 45, 0.95);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        /* Búsqueda */
+        .search-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .search-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        .search-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: #ff9d3f;
+        }
+        .search-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+        /* Filtros */
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #444;
+        }
+        .filter-title {
+            width: 100%;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #bbb;
+        }
+        .filter-option {
+            background-color: #3d3d3d;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid #555;
+            user-select: none;
+            font-size: 0.9em;
+            transition: 0.2s;
+        }
+        .filter-option:hover {
+            background-color: #4d4d4d;
+            border-color: #ff9d3f;
+        }
+        .filter-option input {
+            margin-right: 8px;
+        }
+
+        /* Tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(35, 35, 35, 0.9);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+        th {
+            background-color: #1a1a1a;
+            color: #ff9d3f;
+            padding: 15px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 2px solid #ff9d3f;
+        }
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #333;
+        }
+        
+        /* Clasificación */
+        .clasificacion-row td {
+            background-color: rgba(160, 64, 0, 0.85); /* Naranja oscuro */
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 8px;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-top: 2px solid #ff9d3f;
+        }
+        
+        tr:hover:not(.clasificacion-row) {
+            background-color: rgba(255, 157, 63, 0.1);
+        }
+        
+        /* Estilos de columnas */
+        td:first-child:not(.clasificacion) {
+            font-family: "Consolas", "Monaco", monospace;
+            font-weight: bold;
+            color: #ffbd7f; /* Color hueso/naranja claro para comandos */
+        }
+        td:nth-child(3) {
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Iconos de juegos */
+        .game-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+        }
+
+        /* Clase para el resaltado */
+        .highlight {
+            background-color: #ff9d3f;
+            color: #000;
+            font-weight: bold;
+            border-radius: 2px;
+            padding: 0 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Comandos en los juegos de GoldSrc</h1>
+
+    <div class="controls-container">
+        <div class="search-row">
+            <div class="search-group">
+                <label for="searchCmd">Buscar Comando:</label>
+                <input type="text" id="searchCmd" placeholder="Ej: +attack..." onkeyup="filtrarTabla()">
+            </div>
+            <div class="search-group">
+                <label for="searchDesc">Buscar Descripción:</label>
+                <input type="text" id="searchDesc" placeholder="Ej: Disparo..." onkeyup="filtrarTabla()">
+            </div>
+            <div class="search-group">
+                <label for="searchGame">Buscar Juego:</label>
+                <input type="text" id="searchGame" placeholder="Ej: Counter..." onkeyup="filtrarTabla()">
+            </div>
+        </div>
+
+        <div class="filter-row">
+            <div class="filter-title">Filtrar por Juegos Visibles:</div>
+            <label class="filter-option"><input type="checkbox" checked value="Comandos Generales" onchange="filtrarTabla()"> Generales</label>
+            <label class="filter-option"><input type="checkbox" checked value="Opposing Force" onchange="filtrarTabla()"> Opposing Force</label>
+            <label class="filter-option"><input type="checkbox" checked value="Half-Life" onchange="filtrarTabla()"> Half-Life</label>
+            <label class="filter-option"><input type="checkbox" checked value="Blue-Shift" onchange="filtrarTabla()"> Blue-Shift</label>
+            <label class="filter-option"><input type="checkbox" checked value="Counter-Strike" onchange="filtrarTabla()"> Counter-Strike</label>
+            <label class="filter-option"><input type="checkbox" checked value="Condition Zero" onchange="filtrarTabla()"> Condition Zero</label>
+            <label class="filter-option"><input type="checkbox" checked value="Deleted Scenes" onchange="filtrarTabla()"> Deleted Scenes</label>
+            <label class="filter-option"><input type="checkbox" checked value="Ricochet" onchange="filtrarTabla()"> Ricochet</label>
+            <label class="filter-option"><input type="checkbox" checked value="Team Fortress Classic" onchange="filtrarTabla()"> TFC</label>
+            <label class="filter-option"><input type="checkbox" checked value="Deathmatch Classic" onchange="filtrarTabla()"> DMC</label>
+            <label class="filter-option"><input type="checkbox" checked value="Day of Defeat" onchange="filtrarTabla()"> Day of Defeat</label>
+        </div>
+    </div>
+
+    <table id="tablaComandos">
+        <thead>
+            <tr>
+                <th>Comando</th>
+                <th>Descripción</th>
+                <th>Juego</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="clasificacion-row" data-game="Comandos Generales"><td colspan="3">--- Movimiento Básico ---</td></tr>
+            <tr data-game="Comandos Generales"><td>+forward</td><td>Activa avanzar</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-forward</td><td>Desactiva avanzar</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+back</td><td>Activa retroceder</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-back</td><td>Desactiva retroceder</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+moveleft</td><td>Activa movimiento a la izquierda (Strafe)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-moveleft</td><td>Desactiva movimiento a la izquierda</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+moveright</td><td>Activa movimiento a la derecha (Strafe)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-moveright</td><td>Desactiva movimiento a la derecha</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+jump</td><td>Activa salto</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-jump</td><td>Desactiva salto</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+duck</td><td>Activa agacharse</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-duck</td><td>Desactiva agacharse</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+speed</td><td>Activa caminar sigiloso / sprint (depende del juego)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-speed</td><td>Desactiva caminar/sprint</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+strafe</td><td>Activa modificador de movimiento lateral</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-strafe</td><td>Desactiva modificador de movimiento lateral</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+moveup</td><td>Mover hacia arriba (noclip o nadar)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+movedown</td><td>Mover hacia abajo (noclip o nadar)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>noclip</td><td>Modo fantasma (atravesar paredes)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>god</td><td>Modo Dios (Invulnerabilidad)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>fly</td><td>Modo vuelo</td><td>Comandos Generales</td></tr>
+
+            <tr class="clasificacion-row" data-game="Comandos Generales"><td colspan="3">--- Combate y Acciones Generales ---</td></tr>
+            <tr data-game="Comandos Generales"><td>+attack</td><td>Disparo primario</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-attack</td><td>Dejar de disparar</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+attack2</td><td>Disparo secundario / Acción especial</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-attack2</td><td>Dejar de usar disparo secundario</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+reload</td><td>Recargar arma</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-reload</td><td>Dejar de recargar</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+use</td><td>Usar objeto (puertas, botones, rehenes)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-use</td><td>Dejar de usar</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>impulse 100</td><td>Linterna (en la mayoría de los juegos)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>impulse 201</td><td>Pintar logo (Spray)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>invprev</td><td>Selecciona arma/item anterior</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>invnext</td><td>Selecciona arma/item siguiente</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>lastinv</td><td>Cambia al último arma utilizada</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>slot1</td><td>Selecciona Slot 1</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>slot2</td><td>Selecciona Slot 2</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>slot3</td><td>Selecciona Slot 3</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>slot4</td><td>Selecciona Slot 4</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>slot5</td><td>Selecciona Slot 5</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>slot6</td><td>Selecciona Slot 6</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>slot7</td><td>Selecciona Slot 7</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>slot8</td><td>Selecciona Slot 8</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>slot9</td><td>Selecciona Slot 9</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>slot10</td><td>Selecciona Slot 10</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>cancelselect</td><td>Cancela la selección en menús</td><td>Comandos Generales</td></tr>
+
+            <tr class="clasificacion-row" data-game="Comandos Generales"><td colspan="3">--- Sistema y Consola ---</td></tr>
+            <tr data-game="Comandos Generales"><td>bind</td><td>Asigna una tecla a un comando (ej: bind "k" "kill")</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>unbind</td><td>Elimina la asignación de una tecla</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>unbindall</td><td>Elimina todas las asignaciones</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>alias</td><td>Crea un alias o script para comandos</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>clear</td><td>Limpia el texto de la consola</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>echo</td><td>Muestra un mensaje de texto en la consola</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>exec</td><td>Ejecuta un archivo .cfg</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>writecfg</td><td>Guarda la configuración actual en un archivo</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>cvarlist</td><td>Lista todas las variables del motor</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>cmdlist</td><td>Lista todos los comandos disponibles</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>version</td><td>Muestra la versión del motor/juego</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>quit</td><td>Cierra el juego totalmente</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>exit</td><td>Cierra el juego totalmente</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>_restart</td><td>Reinicia el motor gráfico</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>wait</td><td>Espera un frame (útil para scripts)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>pause</td><td>Pausa el juego (si el servidor lo permite)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>unpause</td><td>Reanuda el juego</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>snapshot</td><td>Toma una captura de pantalla</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>screenshot</td><td>Toma una captura de pantalla</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>save</td><td>Guarda la partida (Single Player)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>load</td><td>Carga una partida</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>autosave</td><td>Activa/desactiva autoguardado</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>new</td><td>Inicia una nueva partida</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>condebug</td><td>Activa el registro de consola a archivo</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>contimes</td><td>Muestra tiempos en el overlay de consola</td><td>Comandos Generales</td></tr>
+
+            <tr class="clasificacion-row" data-game="Comandos Generales"><td colspan="3">--- Servidor y Red ---</td></tr>
+            <tr data-game="Comandos Generales"><td>connect</td><td>Conecta a una IP específica</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>disconnect</td><td>Desconecta del servidor actual</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>reconnect</td><td>Vuelve a conectar al último servidor</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>retry</td><td>Reintenta la conexión (similar a reconnect)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>status</td><td>Muestra info de jugadores, IP y mapa del servidor</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>serverinfo</td><td>Muestra información técnica del servidor</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>ping</td><td>Muestra latencia de los jugadores</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>say</td><td>Chat público</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>say_team</td><td>Chat de equipo</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>tell</td><td>Mensaje privado a un usuario</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>messagemode</td><td>Abre caja de chat público</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>messagemode2</td><td>Abre caja de chat de equipo</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>name</td><td>Cambia el nombre del jugador</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>setinfo</td><td>Configura variables de usuario (ej: password)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>users</td><td>Lista usuarios numerados</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>user</td><td>Info detallada de un usuario</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>kick</td><td>Expulsa a un jugador (Admin)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>banid</td><td>Banea por SteamID (Admin)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>addip</td><td>Banea por IP (Admin)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>rcon</td><td>Ejecuta comandos de administrador remoto</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>map</td><td>Cambia el mapa (Local/Admin)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>changelevel</td><td>Cambia el mapa (mantiene conexión)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>heartbeat</td><td>Envía señal a la lista maestra de servidores</td><td>Comandos Generales</td></tr>
+
+            <tr class="clasificacion-row" data-game="Comandos Generales"><td colspan="3">--- Demos (Grabación) ---</td></tr>
+            <tr data-game="Comandos Generales"><td>record</td><td>Empieza a grabar una demo</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>stop</td><td>Detiene la grabación</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>playdemo</td><td>Reproduce una demo</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>viewdemo</td><td>Reproductor avanzado con barra de tiempo</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>listdemo</td><td>Lista demos en la carpeta</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>appenddemo</td><td>Añade metraje a una demo existente</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>dem_speed</td><td>Velocidad de reproducción</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>timedemo</td><td>Benchmark de FPS usando una demo</td><td>Comandos Generales</td></tr>
+
+            <tr class="clasificacion-row" data-game="Comandos Generales"><td colspan="3">--- Audio y Video ---</td></tr>
+            <tr data-game="Comandos Generales"><td>volume</td><td>Volumen general</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>gamma</td><td>Nivel de gamma</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>brightness</td><td>Nivel de brillo</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>play</td><td>Reproduce un sonido .wav</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>stopsound</td><td>Detiene sonidos en bucle</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>speak</td><td>El narrador dice una frase</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>gl_dump</td><td>Información de la tarjeta gráfica</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>timerefresh</td><td>Rota la cámara rápido para medir FPS</td><td>Comandos Generales</td></tr>
+
+            <tr class="clasificacion-row" data-game="Comandos Generales"><td colspan="3">--- Interfaz y Varios ---</td></tr>
+            <tr data-game="Comandos Generales"><td>+showscores</td><td>Muestra la tabla de puntuaciones (TAB)</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-showscores</td><td>Oculta la tabla de puntuaciones</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>+graph</td><td>Muestra estadísticas de red/FPS</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>-graph</td><td>Oculta estadísticas</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>togglebrowser</td><td>Abre/Cierra el buscador de servidores</td><td>Comandos Generales</td></tr>
+            <tr data-game="Comandos Generales"><td>cl_showfps</td><td>Muestra FPS en la esquina (1=activado)</td><td>Comandos Generales</td></tr>
+
+            <tr class="clasificacion-row" data-game="Opposing Force"><td colspan="3">--- Armas y Combate Específico ---</td></tr>
+            <tr data-game="Opposing Force"><td>impulse 101</td><td>Obtener todas las armas (Incluye Llave, Sniper, M249, Displacer)</td><td><img src="oficon.ico" class="game-icon"> Opposing Force</td></tr>
+            <tr data-game="Opposing Force"><td>+alt1</td><td>Función alternativa (controlar escuadrones o mapa)</td><td><img src="oficon.ico" class="game-icon"> Opposing Force</td></tr>
+            <tr data-game="Opposing Force"><td>special</td><td>Acciones contextuales especiales (Dependiendo del mapa)</td><td><img src="oficon.ico" class="game-icon"> Opposing Force</td></tr>
+
+            <tr class="clasificacion-row" data-game="Half-Life"><td colspan="3">--- Armas (Slots por defecto) ---</td></tr>
+            <tr data-game="Half-Life"><td>slot1</td><td>Palanca (Crowbar)</td><td><img src="hlicon.ico" class="game-icon"> Half-Life</td></tr>
+            <tr data-game="Half-Life"><td>slot2</td><td>Pistola (Glock) / Revolver (.357)</td><td><img src="hlicon.ico" class="game-icon"> Half-Life</td></tr>
+            <tr data-game="Half-Life"><td>slot3</td><td>MP5 / Escopeta / Ballesta</td><td><img src="hlicon.ico" class="game-icon"> Half-Life</td></tr>
+            <tr data-game="Half-Life"><td>slot4</td><td>RPG / Gauss / Egon / Hornet Gun</td><td><img src="hlicon.ico" class="game-icon"> Half-Life</td></tr>
+            <tr data-game="Half-Life"><td>slot5</td><td>Granadas / Tripmines / Snarks</td><td><img src="hlicon.ico" class="game-icon"> Half-Life</td></tr>
+
+            <tr class="clasificacion-row" data-game="Half-Life"><td colspan="3">--- Varios ---</td></tr>
+            <tr data-game="Half-Life"><td>+use</td><td>Muy usado para interactuar con científicos/guardias</td><td><img src="hlicon.ico" class="game-icon"> Half-Life</td></tr>
+            <tr data-game="Half-Life"><td>model</td><td>Cambiar modelo en multiplayer</td><td><img src="hlicon.ico" class="game-icon"> Half-Life</td></tr>
+            <tr data-game="Half-Life"><td>impulse 101</td><td>Obtener todas las armas y munición</td><td><img src="hlicon.ico" class="game-icon"> Half-Life</td></tr>
+
+            <tr class="clasificacion-row" data-game="Blue-Shift"><td colspan="3">--- General ---</td></tr>
+            <tr data-game="Blue-Shift"><td>bshift</td><td>Comando de lanzamiento para iniciar en modo Blue-Shift</td><td><img src="bsicon.ico" class="game-icon"> Blue-Shift</td></tr>
+            <tr data-game="Blue-Shift"><td>gamedir</td><td>Debería mostrar "bshift"</td><td><img src="bsicon.ico" class="game-icon"> Blue-Shift</td></tr>
+            <tr data-game="Blue-Shift"><td>impulse 101</td><td>Obtener todas las armas y munición</td><td><img src="bsicon.ico" class="game-icon"> Blue-Shift</td></tr>
+
+            <tr class="clasificacion-row" data-game="Counter-Strike"><td colspan="3">--- Compras y Menús ---</td></tr>
+            <tr data-game="Counter-Strike"><td>buy</td><td>Abre el menú principal de compra</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>buyequip</td><td>Abre el menú de equipamiento</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>buyammo1</td><td>Compra munición para arma primaria</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>buyammo2</td><td>Compra munición para arma secundaria</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>rebuy</td><td>Compra el mismo equipamiento de la ronda anterior</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>autobuy</td><td>Compra automática (M4/AK + Chaleco + Ammo)</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>chooseteam</td><td>Menú de selección de equipo (T / CT)</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>nightvision</td><td>Activa/Desactiva gafas de visión nocturna</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+
+            <tr class="clasificacion-row" data-game="Counter-Strike"><td colspan="3">--- Radio ---</td></tr>
+            <tr data-game="Counter-Strike"><td>radio1</td><td>Menú Radio Estándar</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>radio2</td><td>Menú Radio Grupo</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>radio3</td><td>Menú Radio Reporte</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+
+            <tr class="clasificacion-row" data-game="Counter-Strike"><td colspan="3">--- Acciones Específicas ---</td></tr>
+            <tr data-game="Counter-Strike"><td>drop</td><td>Soltar el arma que tienes en la mano</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>lastinv</td><td>Cambio rápido al arma anterior</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>+attack2</td><td>Funciones: Silenciador, Zoom, Ráfaga</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+
+            <tr class="clasificacion-row" data-game="Counter-Strike"><td colspan="3">--- Interfaz ---</td></tr>
+            <tr data-game="Counter-Strike"><td>drawradar</td><td>Muestra el radar</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>hideradar</td><td>Oculta el radar</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>adjust_crosshair</td><td>Cambia el color de la mira</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+            <tr data-game="Counter-Strike"><td>timeleft</td><td>Muestra tiempo restante del mapa en el chat</td><td><img src="csicon.ico" class="game-icon"> Counter-Strike</td></tr>
+
+            <tr class="clasificacion-row" data-game="Condition Zero"><td colspan="3">--- Bots y Misiones ---</td></tr>
+            <tr data-game="Condition Zero"><td>bot_add</td><td>Añade un bot a la partida</td><td><img src="czeroicon.ico" class="game-icon"> Condition Zero</td></tr>
+            <tr data-game="Condition Zero"><td>bot_kick</td><td>Expulsa a un bot específico o todos</td><td><img src="czeroicon.ico" class="game-icon"> Condition Zero</td></tr>
+            <tr data-game="Condition Zero"><td>bot_kill</td><td>Mata a todos los bots</td><td><img src="czeroicon.ico" class="game-icon"> Condition Zero</td></tr>
+            <tr data-game="Condition Zero"><td>bot_difficulty</td><td>Ajusta dificultad (0-3)</td><td><img src="czeroicon.ico" class="game-icon"> Condition Zero</td></tr>
+            <tr data-game="Condition Zero"><td>mission</td><td>Muestra la descripción de la misión actual</td><td><img src="czeroicon.ico" class="game-icon"> Condition Zero</td></tr>
+
+            <tr class="clasificacion-row" data-game="Condition Zero"><td colspan="3">--- Compras Avanzadas ---</td></tr>
+            <tr data-game="Condition Zero"><td>buy_preset_edit</td><td>Abre editor de presets de compra</td><td><img src="czeroicon.ico" class="game-icon"> Condition Zero</td></tr>
+            <tr data-game="Condition Zero"><td>buy_preset</td><td>Carga un preset guardado</td><td><img src="czeroicon.ico" class="game-icon"> Condition Zero</td></tr>
+
+            <tr class="clasificacion-row" data-game="Deleted Scenes"><td colspan="3">--- Campaña Single Player ---</td></tr>
+            <tr data-game="Deleted Scenes"><td>worldmap</td><td>Abre el mapa del mundo para seleccionar misiones</td><td><img src="dsicon.ico" class="game-icon"> Deleted Scenes</td></tr>
+            <tr data-game="Deleted Scenes"><td>gadget</td><td>Usa el gadget especial (Cámara, Soplete, Radio)</td><td><img src="dsicon.ico" class="game-icon"> Deleted Scenes</td></tr>
+            <tr data-game="Deleted Scenes"><td>task</td><td>Muestra los objetivos pendientes en pantalla</td><td><img src="dsicon.ico" class="game-icon"> Deleted Scenes</td></tr>
+            <tr data-game="Deleted Scenes"><td>restart</td><td>Reinicia la misión desde el principio</td><td><img src="dsicon.ico" class="game-icon"> Deleted Scenes</td></tr>
+            <tr data-game="Deleted Scenes"><td>save</td><td>Guardado rápido de misión</td><td><img src="dsicon.ico" class="game-icon"> Deleted Scenes</td></tr>
+            <tr data-game="Deleted Scenes"><td>load</td><td>Carga rápida de misión</td><td><img src="dsicon.ico" class="game-icon"> </td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        function filtrarTabla() {
+            var inputCmd = document.getElementById("searchCmd").value.toUpperCase();
+            var inputDesc = document.getElementById("searchDesc").value.toUpperCase();
+            var inputGame = document.getElementById("searchGame").value.toUpperCase();
+            
+            var checkboxes = document.querySelectorAll('.filter-option input[type="checkbox"]');
+            var selectedGames = Array.from(checkboxes)
+                                    .filter(cb => cb.checked)
+                                    .map(cb => cb.value);
+
+            var table = document.getElementById("tablaComandos");
+            var tr = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < tr.length; i++) {
+                var tdCmd = tr[i].getElementsByTagName("td")[0];
+                var tdDesc = tr[i].getElementsByTagName("td")[1];
+                var tdGame = tr[i].getElementsByTagName("td")[2];
+                var gameData = tr[i].getAttribute("data-game");
+
+                if (tdCmd && tdDesc && tdGame) {
+                    var txtCmd = tdCmd.textContent || tdCmd.innerText;
+                    var txtDesc = tdDesc.textContent || tdDesc.innerText;
+                    var txtGame = tdGame.textContent || tdGame.innerText;
+
+                    var matchesSearch = txtCmd.toUpperCase().indexOf(inputCmd) > -1 &&
+                                       txtDesc.toUpperCase().indexOf(inputDesc) > -1 &&
+                                       txtGame.toUpperCase().indexOf(inputGame) > -1;
+                    
+                    var matchesFilter = selectedGames.includes(gameData);
+
+                    if (matchesSearch && matchesFilter) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
