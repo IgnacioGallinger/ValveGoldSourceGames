@@ -1,0 +1,79 @@
+En este archivo de texto le muestro como Instalar en el pack de juegos de GoldSoruce los bots que "Yo uso" y me parecen más funcionales para este:
+
+-----------------------------------
+
+SI SE PIDE REESCRIBIR O REEMPLAZAR ARCHIVOS YA EXISTENTES: DENEGAR ACCIÓN
+
+-----------------------------------
+
+
+
+Half-Life - Sandbot
+https://www.moddb.com/mods/sandbot
+
+Descomprimir "sanbot-v0.5.zip"
+Entrar en la carpeta "Half-Life"
+Entrar en la carpeta "valve"
+Copiar el contenido de la carpeta "valve" y pegarlo en la carpeta "HalfLifeDeathmtachBots"
+
+-----------------------------------
+
+Half-Life: Opposing Force - Sandbot
+https://www.moddb.com/mods/sandbot
+
+Descomprimir "sanbot-v0.5.zip"
+Entrar en la carpeta "Half-Life"
+Entrar en la carpeta "gearbox"
+Copiar el contenido de la carpeta "gearbox" y pegarlo en la carpeta "OpposingForceDeathmtachBots"
+
+-----------------------------------
+
+Day of Defeat - ShrikeBot
+https://gamebanana.com/tools/600
+
+Descomprimir "shrikebot_v231.rar"
+Ejecutar "ShrikeBot V2.3.1.exe"
+(Instalador) Se debe colocar "Select MOD" en "DOD" y "Select Game" en "Won"
+Crear una carpeta temporal
+(Instalador) Tocar "Browse" y seleccionar la ruta de la carpeta temporal
+(Instalador) Tocar el botón que dice Install
+(Instalador) Esperar a que finalize la instalación
+(Instalador) Una vez mostrado el mensaje que anuncia la exitosa instalación, cerrar el instalador.
+Entrar en la carpeta Temporal
+Entrar en la carpeta "dod"
+Copiar el contenido de la carpeta "dod" y pegarlo en la carpeta "DayOfDefeatBots"
+Borrar la carpeta temporal
+
+-----------------------------------
+
+Deathmath Classic - Parabot & Metamod
+https://gamebanana.com/mods/download/562199#FileInfo_1342024
+
+Descomprimir "parabots_dmc_9bb20.zip"
+Entrar en la carpeta "parabots_dmc"
+Copiar el contenido de la carpeta "parabots_dmc" y pegarlo en la carpeta "DeathmatchClassicBots"
+
+-----------------------------------
+
+Ricochet - Ricobot
+https://gamebanana.com/mods/37310
+
+Descomprimir "ricobot.rar"
+Entrar en la carpeta "ricochet"
+Copiar el contenido de la carpeta "ricochet" y pegarlo en la carpeta "RicochetBots"
+
+-----------------------------------
+
+Team Fortress Classic - FoxBot
+https://gamebanana.com/tools/5051
+
+Descomprimir "foxbot.7z"
+Ejecutar "setup.exe"
+(Instalador) Prosegir y avanzar 2 ventanas
+Crear una carpeta temporal
+(Instalador) Tocar el botón "Browse" y selecciona la ruta de la carpeta temporal
+(Instalador) Prosegir hasta que termine la instalación
+(Instalador) Una vez terminada la instalación y encontrarse en la última ventana que anuncia esto, cerrar el instalador.
+Entrar en la carpeta temporal
+Entrar en la carpeta "team fortress classic"
+Copiar el contenido de la carpeta "team fortress classic" en la carpeta "TeamFortressClassicBots"
