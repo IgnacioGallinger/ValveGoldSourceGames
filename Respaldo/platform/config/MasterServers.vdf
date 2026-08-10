@@ -1,0 +1,54 @@
+"MasterServers"
+{
+	"hl1"
+	{
+		"0"
+		{
+			"addr"		"ms.csserv.ru:27010"
+		}
+		"1"
+		{
+			"addr"		"ms.set-master.ru:27010"
+		}
+		"2"
+		{
+			"addr"		"ms.gs4u.net:27010"
+		}
+		"3"
+		{
+			"addr"		"master.css.rin.ru:27010"
+		}
+		"4"
+		{
+			"addr"		"ms.masterservers.ru:27010"
+		}
+		"5"
+		{
+			"addr"		"ms.boost-cs.ru:27010"
+		}
+		"6"
+		{
+			"addr"		"ms.top-ms.ru:27010"
+		}
+		"7"
+		{
+			"addr"		"ms.gametracker.rs:27010"
+		}
+		"8"
+		{
+			"addr"		"ms.cs-striker.ru:27010"
+		}
+		"9"
+		{
+			"addr"		"ms.full-server.ru:27010"
+		}
+		"10"
+		{
+			"addr"		"ms.monitoring-cs.ru:27010"
+		}
+		"11"
+		{
+			"addr"		"ms.cs-nonsteam.ru:27010"
+		}
+	}
+}
