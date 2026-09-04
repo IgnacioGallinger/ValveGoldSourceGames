@@ -12,24 +12,24 @@ Usted está apunto de instalar una Version No Steam y No Oficial de todos los ju
 Valve no esta Afiliado en este proyecto
 
 REQUISITOS (MÍNIMOS): 
--Procesador de 500 MHz
--96 MB de RAM
--Tarjeta de vídeo de 16 MB
--Windows XP
--Ratón y Teclado
--4GB de Almacenamiento Disponible
+- Procesador de 500 MHz
+- 96 MB de RAM
+- Tarjeta de vídeo de 16 MB
+- Windows XP
+- Ratón y Teclado
+- 4GB de Almacenamiento Disponible
 
 "ValveGoldSrcGames" es un compilado de todos los juegos que valve ha hecho en GoldSrc, los juego serian:
--Half-Life
--Half-Life: Opposing Force
--Half-Life: Blue Shift
--Counter Strike
--Counter Strike: Condition Zero
--Counter Strike Condition Zero: Deleted Scenes
--Day of Defeat
--Team Fortress Classic
--Ricochet
--Deathmatch Classic
+- Half-Life
+- Half-Life: Opposing Force
+- Half-Life: Blue Shift
+- Counter-Strike
+- Counter-Strike: Condition Zero
+- Counter-Strike: Condition Zero: Deleted Scenes
+- Day of Defeat
+- Team Fortress Classic
+- Ricochet
+- Deathmatch Classic
 
 Ofrece nuevas opciones, algunas dificiles de realizar en versiones No Steam que esta version facilita su accion
 
