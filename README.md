@@ -3,6 +3,9 @@ This pack includes all 10 games distributed and developed by Valve using the Gol
 
 Este paquete incluye los 10 juegos distribuidos y desarrollados por Valve utilizando el motor GoldSource, además de algunos agregados adicionales con características extra...
 
+# ----- Working on 1.1 -----
+
+
 ### (Spanish)
 Instalador de ValveGoldSrcGames v1.0.0
 
